@@ -1,4 +1,4 @@
-# BBR Log Server
+# BBR Log Visualizer
 
 A real-time log visualization server with a Matrix-style rain effect. This application receives log entries via HTTP POST requests and broadcasts them to connected WebSocket clients for real-time visualization.
 
