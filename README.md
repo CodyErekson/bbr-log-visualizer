@@ -2,12 +2,15 @@
 
 A real-time log visualization server with a Matrix-style rain effect. This application receives log entries via HTTP POST requests and broadcasts them to connected WebSocket clients for real-time visualization.
 
+![BBR Log Visualizer Screenshot](screenshot.png)
+
 ## Features
 
 - **Real-time Log Streaming**: WebSocket-based real-time log broadcasting
-- **Matrix-style Visualization**: Animated log entries with falling rain effect
+- **Matrix-style Visualization**: Animated log entries with falling rain effect, color-coded by log level
 - **RESTful API**: Simple HTTP POST endpoint for log ingestion
 - **Log Level Validation**: Supports standard log levels (emergency, alert, critical, error, warning, notice, info, debug)
+- **Color-coded Display**: Log entries are color-coded by severity level (errors in red, warnings in yellow, etc.)
 - **Live Statistics**: Real-time server statistics display
 - **Docker Support**: Containerized deployment ready
 
