@@ -1,0 +1,39 @@
+{
+  "name": "bbr-log-server",
+  "version": "1.0.0",
+  "description": "Real-time log visualization with Matrix-style rain effect",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "docker:build": "docker build -t bbr-log-server .",
+    "docker:run": "docker run -p 2069:2069 bbr-log-server",
+    "docker:run:custom": "docker run -p ${PORT:-2069}:${PORT:-2069} -e PORT=${PORT:-2069} bbr-log-server"
+  },
+  "keywords": [
+    "logs",
+    "visualization",
+    "real-time",
+    "websocket",
+    "matrix",
+    "monitoring"
+  ],
+  "author": "Cody Erekson <cody.erekson@gmail.com>",
+  "license": "AGPL-3.0",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.14.2",
+    "body-parser": "^1.20.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/bbr-log-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/bbr-log-server/issues"
+  },
+  "homepage": "https://github.com/your-org/bbr-log-server#readme"
+}

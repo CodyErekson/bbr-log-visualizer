@@ -1,0 +1,85 @@
+/* Base styles */
+body { 
+  margin: 0; 
+  overflow: hidden; 
+  background: black; 
+}
+
+canvas { 
+  display: block; 
+}
+
+/* Indicator panel styles */
+#indicator-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 3px;
+  border: 1px solid #00ff00;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.indicator-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.indicator-text {
+  color: #00ff00;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+/* Connection status indicator */
+#connection-status {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ff0000;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+#connection-status:hover {
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+
+#connection-status.connected { 
+  background-color: #00ff00; 
+}
+
+#connection-status.connecting { 
+  background-color: #ffff00; 
+}
+
+#connection-status.disconnected { 
+  background-color: #ff0000; 
+}
+
+/* Minimized panel state */
+#indicator-panel.minimized {
+  padding: 8px;
+  min-width: auto;
+  width: auto;
+}
+
+#indicator-panel.minimized .indicator-text:not(:first-child),
+#indicator-panel.minimized .indicator-line:not(:first-child) {
+  display: none;
+}
+
+#indicator-panel.minimized .indicator-line:first-child {
+  justify-content: center;
+  margin-bottom: 0;
+}
+
+#indicator-panel.minimized .indicator-line:first-child .indicator-text {
+  display: none;
+}

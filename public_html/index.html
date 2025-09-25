@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!--
+  BBR Log Visualizer
+  
+  A real-time log visualization tool that displays log messages in a Matrix-inspired
+  rain effect. Logs are received via WebSocket and displayed as falling characters
+  with colors and sizes based on log levels.
+  
+  "I don't even see the code. All I see is blonde, brunette, redhead.".
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BBR Log Visualizer</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+  <div id="indicator-panel">
+    <div class="indicator-line">
+      <span class="indicator-text">Connection:</span>
+      <div id="connection-status" title="Click to minimize/expand status panel"></div>
+    </div>
+    <div id="speed-indicator" class="indicator-text">0 mps</div>
+    <div id="drop-speed-indicator" class="indicator-text">0 dps</div>
+    <div id="received-indicator" class="indicator-text">0 received</div>
+    <div id="drops-indicator" class="indicator-text">0 drops</div>
+    <div id="lost-indicator" class="indicator-text">0 lost</div>
+    <div id="queue-indicator" class="indicator-text">0 queued</div>
+    <div id="interval-indicator" class="indicator-text">33 FPS (30ms)</div>
+  </div>
+
+  <script src="assets/script.js"></script>
+</body>
+</html>
