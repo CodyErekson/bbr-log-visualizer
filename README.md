@@ -74,33 +74,13 @@ curl -X POST http://your-domain.com:2069/logs \
 - `message` (string): The log message content
 - `level` (string): Log level (emergency, alert, critical, error, warning, notice, info, debug)
 
-### Optional Fields
 
-- `timestamp` (string): ISO 8601 timestamp
-- `source` (string): Source of the log entry
-- `metadata` (object): Additional metadata
-
-### Example Log Entries
+### Example Log Entry
 
 ```json
 {
   "message": "Database connection established",
-  "level": "info",
-  "timestamp": "2024-01-15T10:30:00Z",
-  "source": "database.js"
-}
-```
-
-```json
-{
-  "message": "Critical error in payment processing",
-  "level": "critical",
-  "timestamp": "2024-01-15T10:31:15Z",
-  "source": "payment.js",
-  "metadata": {
-    "userId": "12345",
-    "transactionId": "tx_abc123"
-  }
+  "level": "info"
 }
 ```
 
