@@ -11,7 +11,8 @@ A real-time log visualization server with a Matrix-style rain effect. This appli
 - **RESTful API**: Simple HTTP POST endpoint for log ingestion
 - **Log Level Validation**: Supports standard log levels (emergency, alert, critical, error, warning, notice, info, debug)
 - **Color-coded Display**: Log entries are color-coded by severity level (errors in red, warnings in yellow, etc.)
-- **Live Statistics**: Real-time server statistics display
+- **Live Statistics**: Real-time server statistics display (debug mode only)
+- **Flexible Logging**: Production logging to file or debug console output
 - **Docker Support**: Containerized deployment ready
 
 ## Quick Start
@@ -25,11 +26,17 @@ A real-time log visualization server with a Matrix-style rain effect. This appli
 
 2. **Run the container:**
    ```bash
-   # Using default port 2069
+   # Production mode (logs to server.log file)
    docker run -p 2069:2069 bbr-log-server
+   
+   # Debug mode (outputs to console with live stats)
+   docker run -p 2069:2069 -e DEBUG=true bbr-log-server
    
    # Using custom port
    docker run -p 8080:8080 -e PORT=8080 bbr-log-server
+   
+   # Debug mode with custom port
+   docker run -p 8080:8080 -e DEBUG=true -e PORT=8080 bbr-log-server
    ```
 
 3. **Access the application:**
@@ -45,11 +52,17 @@ A real-time log visualization server with a Matrix-style rain effect. This appli
 
 2. **Start the server:**
    ```bash
-   # Using default port 2069
+   # Production mode (logs to server.log file)
    npm start
+   
+   # Debug mode (outputs to console with live stats)
+   DEBUG=true npm start
    
    # Using custom port
    PORT=8080 npm start
+   
+   # Debug mode with custom port
+   DEBUG=true PORT=8080 npm start
    ```
 
 3. **Access the application:**
@@ -92,6 +105,25 @@ curl -X POST http://your-domain.com:2069/logs \
 ### Environment Variables
 
 - `PORT`: Server port (default: 2069)
+- `DEBUG`: Enable debug mode (set to `true` or `1` to enable console output and live stats)
+
+### Debug Mode vs Production Mode
+
+The server operates in two distinct modes based on the `DEBUG` environment variable:
+
+**Production Mode (default):**
+- All server output is logged to `server.log` file
+- No console output except for errors
+- No live statistics display
+- Optimized for production deployment
+
+**Debug Mode (`DEBUG=true` or `DEBUG=1`):**
+- All output appears in the console
+- Live statistics display showing requests/sec and messages/sec
+- Real-time server monitoring
+- Ideal for development and troubleshooting
+
+**Note:** Statistics are never logged to file - they only appear in the console when in debug mode.
 
 ### Domain and DNS Configuration
 
@@ -103,60 +135,34 @@ Before deploying, you'll need to set up your domain and DNS:
    - Optionally create a CNAME for www: `www.your-domain.com` → `your-domain.com`
 3. **Update the configuration** below with your actual domain name
 
-### Nginx Configuration
+### Nginx Setup
 
-For production deployment with Nginx as a reverse proxy:
+1. **Use the template:**
+   ```bash
+   cp nginx.conf.template your-domain.com.conf
+   sed -i 's/YOUR_DOMAIN_HERE/your-domain.com/g' your-domain.com.conf
+   sed -i 's/YOUR_NODEJS_PORT/2069/g' your-domain.com.conf
+   ```
 
-```nginx
-server {
-    listen 80;
-    server_name your-domain.com www.your-domain.com;
-    
-    # Serve static files from public_html
-    location / {
-        root /path/to/your/log_visualizer/public_html;
-        try_files $uri $uri/ /index.html;
-    }
-    
-    # Proxy API requests to the Node.js server
-    location /logs {
-        proxy_pass http://127.0.0.1:2069;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }
-    
-    # Proxy WebSocket connections
-    location / {
-        proxy_pass http://127.0.0.1:2069;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-}
-```
+2. **Set up SSL with Let's Encrypt:**
+   ```bash
+   sudo apt install certbot python3-certbot-nginx
+   sudo certbot --nginx -d your-domain.com
+   ```
 
-### SSL/HTTPS Setup (Recommended)
+3. **Deploy the configuration:**
+   ```bash
+   sudo cp your-domain.com.conf /etc/nginx/sites-available/
+   sudo ln -s /etc/nginx/sites-available/your-domain.com.conf /etc/nginx/sites-enabled/
+   sudo nginx -t && sudo systemctl reload nginx
+   ```
 
-For production, enable HTTPS using Let's Encrypt:
-
-```bash
-# Install certbot
-sudo apt update
-sudo apt install certbot python3-certbot-nginx
-
-# Get SSL certificate
-sudo certbot --nginx -d your-domain.com -d www.your-domain.com
-
-# Auto-renewal (already configured by certbot)
-sudo certbot renew --dry-run
-```
+4. **Set up web directory:**
+   ```bash
+   sudo mkdir -p /var/www/your-domain.com/public_html
+   sudo cp -r public_html/* /var/www/your-domain.com/public_html/
+   sudo chown -R www-data:www-data /var/www/your-domain.com/
+   ```
 
 ## Development
 
