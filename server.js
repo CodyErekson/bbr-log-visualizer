@@ -100,9 +100,24 @@ function broadcast(message) {
 }
 
 // WebSocket connection handling
-wss.on('connection', (ws) => {
-    clients.add(ws);
-    ws.on('close', () => clients.delete(ws));
+wss.on('connection', (ws, req) => {
+    // Check if the connection is coming from the /ws path
+    if (req.url === '/ws' || req.url === '/') {
+        clients.add(ws);
+        logMessage(`WebSocket client connected from ${req.socket.remoteAddress}`, 'info');
+        
+        ws.on('close', () => {
+            clients.delete(ws);
+            logMessage(`WebSocket client disconnected`, 'info');
+        });
+        
+        ws.on('error', (error) => {
+            logMessage(`WebSocket error: ${error.message}`, 'error');
+        });
+    } else {
+        // Reject connections not on the /ws path
+        ws.close(1000, 'WebSocket connections only allowed on /ws path');
+    }
 });
 
 // REST API endpoints

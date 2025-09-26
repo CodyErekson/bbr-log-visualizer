@@ -3,7 +3,7 @@ const CONFIG = {
   // WebSocket Configuration
   wsUrl: window.location.protocol === 'file:' 
     ? 'ws://localhost:2069'  // Fallback for local file testing
-    : `ws://${window.location.host}`, // When served through the server
+    : `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws`, // Secure WebSocket for HTTPS
 
   // Font Configuration
   baseFontSize: 12,
