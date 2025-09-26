@@ -24,22 +24,34 @@ A real-time log visualization server with a Matrix-style rain effect. This appli
    docker build -t bbr-log-server .
    ```
 
-2. **Run the container:**
+2. **Run the container in detached mode:**
    ```bash
-   # Production mode (logs to server.log file)
-   docker run -p 2069:2069 bbr-log-server
+   # Production mode (runs in background)
+   docker run -d --name bbr-log-server -p 2069:2069 bbr-log-server
    
-   # Debug mode (outputs to console with live stats)
-   docker run -p 2069:2069 -e DEBUG=true bbr-log-server
+   # Debug mode (runs in background with live stats)
+   docker run -d --name bbr-log-server -p 2069:2069 -e DEBUG=true bbr-log-server
    
    # Using custom port
-   docker run -p 8080:8080 -e PORT=8080 bbr-log-server
-   
-   # Debug mode with custom port
-   docker run -p 8080:8080 -e DEBUG=true -e PORT=8080 bbr-log-server
+   docker run -d --name bbr-log-server -p 8080:8080 -e PORT=8080 bbr-log-server
    ```
 
-3. **Access the application:**
+3. **View logs:**
+   ```bash
+   # View real-time logs
+   docker logs -f bbr-log-server
+   
+   # View last 100 lines
+   docker logs --tail 100 bbr-log-server
+   
+   # Stop the container
+   docker stop bbr-log-server
+   
+   # Remove the container
+   docker rm bbr-log-server
+   ```
+
+4. **Access the application:**
    - Open your browser to `http://your-domain.com:2069`
    - The web interface will display real-time logs with Matrix-style animation
 
