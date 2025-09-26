@@ -52,7 +52,7 @@ A real-time log visualization server with a Matrix-style rain effect. This appli
    ```
 
 4. **Access the application:**
-   - Open your browser to `http://your-domain.com:2069`
+   - Open your browser to `http://your-domain.com` (no port needed when using nginx proxy)
    - The web interface will display real-time logs with Matrix-style animation
 
 ### Manual Installation
@@ -78,7 +78,8 @@ A real-time log visualization server with a Matrix-style rain effect. This appli
    ```
 
 3. **Access the application:**
-   - Open your browser to `http://your-domain.com:2069`
+   - **Local development**: Open your browser to `http://localhost:2069`
+   - **Production with nginx**: Open your browser to `http://your-domain.com` (no port needed)
 
 ## API Usage
 
@@ -87,7 +88,18 @@ A real-time log visualization server with a Matrix-style rain effect. This appli
 Send log entries to the server using HTTP POST requests:
 
 ```bash
-curl -X POST http://your-domain.com:2069/logs \
+# For local development
+curl -X POST http://localhost:2069/logs \
+  -H "Content-Type: application/json" \
+  -d '{
+    "message": "Application started successfully",
+    "level": "info",
+    "timestamp": "2024-01-15T10:30:00Z",
+    "source": "main.js"
+  }'
+
+# For production with nginx proxy
+curl -X POST http://your-domain.com/logs \
   -H "Content-Type: application/json" \
   -d '{
     "message": "Application started successfully",
