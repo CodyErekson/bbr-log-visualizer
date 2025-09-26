@@ -17,6 +17,7 @@ OPTIONS:
                           error, warning, info, debug.
     -s, --summary          Track and display statistics for each log level
     -d, --debug            Enable debug logging of sent messages to console
+    -u, --url URL          Override the endpoint URL (default: http://localhost:2069/logs)
 
 EXAMPLES:
     $0                     # Generate 5 messages per second (default levels)
@@ -26,11 +27,13 @@ EXAMPLES:
     $0 10 --all            # Generate 10 messages per second with all levels
     $0 --summary           # Generate with statistics tracking
     $0 10 --all --summary  # Generate 10 messages per second with all levels and stats
+    $0 --url http://example.com/logs  # Use custom endpoint URL
     $0 --help              # Show this help message
 
 DESCRIPTION:
     This script generates random log messages with different severity levels
-    and sends them to the log visualizer server running on localhost:2069. 
+    and sends them to the log visualizer server. By default, it sends to
+    localhost:2069, but you can override the URL with the --url option.
     Each message includes a timestamp and realistic log content appropriate 
     for its severity level.
 
@@ -74,6 +77,16 @@ while [[ $# -gt 0 ]]; do
         -d|--debug)
             ENABLE_DEBUG=true
             shift
+            ;;
+        -u|--url)
+            if [[ -n "${2:-}" ]]; then
+                ENDPOINT="$2"
+                shift 2
+            else
+                echo "Error: --url requires a URL argument"
+                echo "Use --help for usage information"
+                exit 1
+            fi
             ;;
         -*)
             echo "Unknown option: $1"
